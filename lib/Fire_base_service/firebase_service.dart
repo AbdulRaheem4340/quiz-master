@@ -331,6 +331,49 @@ class FirebaseService {
     }
   }
 
+  // ADD this method inside your FirebaseService class
+
+Future<void> resetPlayedQuizIds(int categoryId) async {
+  try {
+    if (!isLoggedIn) return;
+
+    final uid = userId!;
+
+    // Get all results for this user
+    final snapshot = await _database
+        .child('results')
+        .child(uid)
+        .get();
+
+    if (!snapshot.exists) return;
+
+    // Find all result keys that belong to this category
+    List<String> keysToDelete = [];
+
+    for (final child in snapshot.children) {
+      final dbCatId = child.child('categoryId').value?.toString();
+      if (dbCatId == categoryId.toString()) {
+        keysToDelete.add(child.key!);
+      }
+    }
+
+    // Delete all results for this category
+    for (final key in keysToDelete) {
+      await _database
+          .child('results')
+          .child(uid)
+          .child(key)
+          .remove();
+    }
+
+    debugPrint(
+      '✅ Reset ${keysToDelete.length} results for category $categoryId',
+    );
+  } catch (e) {
+    debugPrint('❌ Error resetting played quiz ids: $e');
+  }
+}
+
   // USER HISTORY
   Future<List<Map<String, dynamic>>> getUserHistory() async {
     try {

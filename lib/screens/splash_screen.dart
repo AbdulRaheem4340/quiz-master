@@ -39,7 +39,7 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   void _startApp() {
-    Timer(const Duration(seconds: 2), () {
+    Timer(const Duration(seconds: 3), () {
       if (!mounted) return;
 
       final user = FirebaseAuth.instance.currentUser;

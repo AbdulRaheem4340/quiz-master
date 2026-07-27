@@ -1,16 +1,90 @@
-# local_service_marketplace
+# 📚 Quiz Master
 
-A new Flutter project.
+A modern Flutter Quiz application built with **Flutter**, **Firebase**, and **GetX**.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## ✨ Features
 
-A few resources to get you started if this is your first Flutter project:
+- 🔐 Firebase Authentication
+- 📝 Multiple Quiz Categories
+- 🏆 Leaderboard
+- 👤 User Profile
+- 📊 Score Tracking
+- 🎨 Beautiful Modern UI
+- ⚡ GetX State Management
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+---
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 🛠 Tech Stack
+
+- Flutter
+- Dart
+- Firebase Authentication
+- Cloud Firestore
+- GetX
+- Shared Preferences
+
+---
+
+# 📱 Screenshots
+
+## Complete imgae
+
+<image src="assets/whole.png"width="280"/>
+
+## Dashboard
+
+<img src="assets/dashboard.png" width="280"/>
+
+---
+
+## Login
+
+<img src="assets/login.png" width="280"/>
+
+---
+
+## Question Screen
+
+<img src="assets/question.png" width="280"/>
+
+---
+
+## Leaderboard
+
+<img src="assets/leaderboard.png" width="280"/>
+
+---
+
+## Profile
+
+<img src="assets/profile.png" width="280"/>
+
+---
+
+## Result
+
+<!-- <img src="images/result.png" width="280"/> -->
+
+---
+
+## 🚀 Installation
+
+```bash
+git clone https://github.com/AbdulRaheem4340/quiz-master.git
+
+cd quiz-master
+
+flutter pub get
+
+flutter run
+```
+
+---
+
+## 👨‍💻 Developer
+
+**Abdul Raheem**
+
+Flutter Developer

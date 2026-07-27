@@ -8,7 +8,7 @@ import 'package:local_service_marketplace/screens/quiz_playing_screen.dart';
 class QuizListController extends GetxController {
   final FirebaseService _firebase = FirebaseService();
 
-  // Parameter passed from HomeScreen
+  // Parameter passed from QuizListScreen
   late QuizCategory category;
 
   // Observable State
@@ -22,21 +22,39 @@ class QuizListController extends GetxController {
     loadQuizzes();
   }
 
-  ///  Load all quizzes for this category
+  // ─────────────────────────────────────────────────────
+  // LOAD QUIZZES
+  // ─────────────────────────────────────────────────────
   Future<void> loadQuizzes() async {
     isLoading.value = true;
 
     try {
+      // 1. Fetch all quizzes for this category
       final result = await _firebase.getQuizzesByCategory(category.id);
+
+      // 2. Fetch which quizzes user already played
       List<int> playedIds = await _firebase.getPlayedQuizIds(category.id);
 
-      //  Reset locks if user completed ALL quizzes in this category
-      if (playedIds.length >= result.length && result.isNotEmpty) {
-        playedIds.clear();
+      debugPrint('📋 Total quizzes: ${result.length}');
+      debugPrint('🔒 Played (locked) quiz IDs: $playedIds');
+
+      // 3. If ALL quizzes are played → RESET everything → ALL OPEN AGAIN
+      if (result.isNotEmpty && playedIds.length >= result.length) {
+        debugPrint('🔄 All quizzes completed! Resetting...');
+
+        // Reset in Firebase
+        await _firebase.resetPlayedQuizIds(category.id);
+
+        // Reset locally
+        playedIds = [];
+
+        debugPrint('✅ Reset done! All quizzes are OPEN again!');
       }
 
+      // 4. Update state
       quizzes.value = result;
       playedQuizIds.value = playedIds;
+
     } catch (e) {
       debugPrint('❌ Error loading quizzes: $e');
     } finally {
@@ -44,24 +62,62 @@ class QuizListController extends GetxController {
     }
   }
 
-  ///  Start a quiz
-  void startQuiz(Quiz quiz) async {
-    await Get.to(() => QuizPlayingScreen(quiz: quiz, category: category));
-    loadQuizzes();
+  // ─────────────────────────────────────────────────────
+  // IS QUIZ LOCKED?
+  //
+  // SIMPLE RULE:
+  // ✅ Quiz is in playedQuizIds → LOCKED
+  // ✅ Quiz is NOT in playedQuizIds → OPEN
+  // ─────────────────────────────────────────────────────
+  bool isQuizLocked(int quizId) {
+    // If quiz is already played → LOCKED
+    // If quiz is not played yet → OPEN
+    return playedQuizIds.contains(quizId);
   }
 
-  ///  Show "locked" message
+  // ─────────────────────────────────────────────────────
+  // START QUIZ
+  // ─────────────────────────────────────────────────────
+  void startQuiz(Quiz quiz) async {
+    // Safety check
+    if (isQuizLocked(quiz.id)) {
+      showLockedMessage();
+      return;
+    }
+
+    // Go to quiz playing screen
+    await Get.to(() => QuizPlayingScreen(
+      quiz: quiz,
+      category: category,
+    ));
+
+    // Reload after returning (quiz completed → now locked)
+    await loadQuizzes();
+  }
+
+  // ─────────────────────────────────────────────────────
+  // SHOW LOCKED MESSAGE
+  // ─────────────────────────────────────────────────────
   void showLockedMessage() {
     Get.snackbar(
-      'Quiz Locked',
-      'You must finish the other quizzes first! 🔒',
+      '🔒 Already Played',
+      'You already completed this quiz! Play remaining quizzes to unlock it again.',
       snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: Colors.orange,
+      backgroundColor: Colors.orange.shade800,
       colorText: Colors.white,
-      duration: const Duration(seconds: 2),
+      duration: const Duration(seconds: 3),
+      margin: const EdgeInsets.all(12),
+      borderRadius: 12,
+      icon: const Icon(Icons.lock_outline, color: Colors.white),
     );
   }
 
-  /// Check if a quiz is locked
-  bool isQuizLocked(int quizId) => playedQuizIds.contains(quizId);
+  // ─────────────────────────────────────────────────────
+  // PROGRESS HELPERS (for UI)
+  // ─────────────────────────────────────────────────────
+  int get completedCount => playedQuizIds.length;
+  int get totalCount => quizzes.length;
+  int get remainingCount => totalCount - completedCount;
+  double get progressPercentage =>
+      totalCount > 0 ? completedCount / totalCount : 0.0;
 }
