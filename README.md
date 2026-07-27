@@ -28,7 +28,7 @@ A modern Flutter Quiz application built with **Flutter**, **Firebase**, and **Ge
 ---
 
 ##   📱 Screenshots
-## Complete imgae
+## Complete image
 
 <image src="assets/whole.png" width="280"/>
 
