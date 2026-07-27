@@ -27,7 +27,6 @@ A modern Flutter Quiz application built with **Flutter**, **Firebase**, and **Ge
 
 ---
 
-# 📱 Screenshots
 
 ## Complete imgae
 
@@ -63,13 +62,9 @@ A modern Flutter Quiz application built with **Flutter**, **Firebase**, and **Ge
 
 ---
 
-## Result
 
-<!-- <img src="images/result.png" width="280"/> -->
 
----
-
-## 🚀 Installation
+## 🚀 Installation Process
 
 ```bash
 git clone https://github.com/AbdulRaheem4340/quiz-master.git
