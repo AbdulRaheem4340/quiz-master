@@ -30,7 +30,7 @@ A modern Flutter Quiz application built with **Flutter**, **Firebase**, and **Ge
 ##   📱 Screenshots
 ## Complete imgae
 
-<image src="assets/whole.png"width="280"/>
+<image src="assets/whole.png" width="280"/>
 
 ## Login
 
@@ -43,8 +43,6 @@ A modern Flutter Quiz application built with **Flutter**, **Firebase**, and **Ge
 <img src="assets/dashboard.png" width="280"/>
 
 ---
-
-
 
 ## Question Screen
 
